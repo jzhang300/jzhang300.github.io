@@ -98,16 +98,17 @@
 
   var _hasTouched = false;
 
+  plant.addEventListener('touchStart', function() {
+    sound.toggleSound();
+    _hasTouched = true;
+    alert('touchstart');
+  }, false);
+
   plant.addEventListener('click', function() {
     if (!_hasTouched) {
       sound.toggleSound();
       _hasTouched = false;
     }
-  }, false);
-
-  plant.addEventListener('touchStart', function() {
-    sound.toggleSound();
-    _hasTouched = true;
   }, false);
   </script>
 </body>
