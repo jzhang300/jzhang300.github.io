@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    .plant {
+      animation: plant-animation 5s infinite;
+      animation-timing-function: ease-in-out;
+      margin: auto;
+      display: block;
+    }
+
+    @media screen and (min-width: 700px) {
+      .plant {
+        width: 100%;
+      }
+    }
+
+    @keyframes plant-animation {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img class="plant" src="plant.png">
+</body>
+</html>
