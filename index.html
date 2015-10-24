@@ -96,9 +96,19 @@
 
   var sound = new Sound('eva-soundbite.mp3', context);
 
+  var _hasTouched = false;
+
   plant.addEventListener('click', function() {
+    if (!_hasTouched) {
+      sound.toggleSound();
+      _hasTouched = false;
+    }
+  }, false);
+
+  plant.addEventListener('touchStart', function() {
     sound.toggleSound();
-  });
+    _hasTouched = true;
+  }, false);
   </script>
 </body>
 </html>
