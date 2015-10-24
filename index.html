@@ -36,32 +36,69 @@
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   /* variables */
   var context = new AudioContext();
-  var analyser = context.createAnalyser();
-  var buffer;
-  var source = context.createBufferSource();
+  var plant = document.querySelector('.plant');
 
-  function playSound() {
-    /* Load a local audio file using XMLHttpRequest */
-    var request = new XMLHttpRequest();
-    /* API Get request to audio file */
-    request.open("GET", "eva-soundbite.mp3", true);
-    /* Read as Binary Data */
-    request.responseType = "arraybuffer";
-    request.onload = function() {
-      /* decode the loaded data and play it */
-      context.decodeAudioData(request.response, function(buf) {
-        /* set the buffer to the audio data that's requested */
-        buffer = buf;
-        /* hook up buffer to source's buffer */
-        source.buffer = buffer;
-        /* connecting the nodes */
-        source.connect(context.destination);
-        /* play sound */
-        source.start(0);
-      });
+  // Sound constructor
+  function Sound(path, context) {
+    /* instances */
+    var self = this,
+        _isPlaying = false,
+        _path = path,
+        _buffer,
+        self.context = context,
+        self.audioNode;
+
+    /* methods */
+    var _init,
+        _loadBuffer,
+        self.toggleSound;
+
+    /*
+    * This method instantiates Sound instance
+    */
+    _init = function() {
+      _loadBuffer();
     };
-    request.send();
+
+    /*
+    * Load the buffer of the new sound
+    */
+    _loadBuffer = function() {
+      var request = new XMLHttpRequest();
+      request.open('GET', _path, true);
+      request.responseType = 'arraybuffer';
+      request.onload = function() {
+        self.context.decodeAudioData(request.response, function(buffer) {
+          _buffer = buffer;
+        });
+      };
+      request.send();
+    };
+
+    /*
+    * Play the buffered audio from beginning or stop playing current audio.
+    */
+    self.toggleSound = function() {
+      if (_isPlaying) {
+        self.audioNode.stop();
+        _isPlaying = false;
+      } else {
+        self.audioNode = self.context.createBufferSource();
+        self.audioNode.buffer = _buffer;
+        self.audioNode.connect(self.context.destination);
+        self.audioNode.start(0);
+        _isPlaying = true;
+      }
+    }
+
+    _init();
   }
+
+  var sound = new Sound('eva-soundbite.mp3', context);
+
+  plant.addEventListener('click', function() {
+    sound.toggleSound();
+  });
   </script>
 </body>
 </html>
